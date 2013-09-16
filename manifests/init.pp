@@ -45,7 +45,7 @@ define ramdisk(
   $size = '64M',
   $mode = '1777',
   $owner = 'root',
-  $group = 'root',
+  $group = 'root'
 ) {
   if $::kernelmajversion <= 2.4 {
     fail('Unsuported kernel version')
