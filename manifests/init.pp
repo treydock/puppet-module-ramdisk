@@ -53,9 +53,11 @@ define ramdisk(
   }
 
   if $ensure == 'present' {
-    $real_ensure = 'directory'
+    $file_ensure  = 'directory'
+    $mount_ensure = 'mounted'
   } else {
-    $real_ensure = 'absent'
+    $file_ensure  = 'absent'
+    $mount_ensure = 'absent'
   }
 
   $options_real = $options ? {
@@ -64,17 +66,14 @@ define ramdisk(
   }
 
   file { $path:
-    ensure  => $real_ensure,
+    ensure  => $file_ensure,
     mode    => $mode,
     owner   => $owner,
     group   => $group,
   } ->
 
   mount { $path:
-    ensure  => $real_ensure ? {
-      directory => mounted,
-      default   => absent,
-    },
+    ensure  => $mount_ensure,
     device  => 'tmpfs',
     fstype  => $fstype,
     options => $options_real,

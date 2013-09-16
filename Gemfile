@@ -1,7 +1,13 @@
-source 'https://rubygems.org'
+source "http://rubygems.org"
 
-puppetversion = ENV.key?('PUPPET_VERSION') ? "= #{ENV['PUPPET_VERSION']}" : ['>= 2.7']
-gem 'puppet', puppetversion
-gem 'puppet-lint'
-gem 'rspec-puppet'
-gem 'puppetlabs_spec_helper', '>= 0.1.0'
+group :development, :test do
+  gem 'puppetlabs_spec_helper', :require => false
+  gem 'puppet-lint'
+  gem 'travis-lint'
+end
+
+if puppetversion = ENV['PUPPET_GEM_VERSION']
+  gem 'puppet', puppetversion, :require => false
+else
+  gem 'puppet', :require => false
+end
