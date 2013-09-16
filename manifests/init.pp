@@ -41,6 +41,7 @@ define ramdisk(
   $mount = 'mounted',
   $path = '/tmp/ramdisk',
   $fstype = 'tmpfs',
+  $options = 'UNSET',
   $atboot = true,
   $size = '64M',
   $mode = '1777',
@@ -57,6 +58,11 @@ define ramdisk(
     $real_ensure = 'absent'
   }
 
+  $options_real = $options ? {
+    'UNSET' => "size=${size},mode=${mode},uid=${owner},gid=${group}",
+    default => $options,
+  }
+
   file { $path:
     ensure  => $real_ensure,
     mode    => $mode,
@@ -71,7 +77,7 @@ define ramdisk(
     },
     device  => 'tmpfs',
     fstype  => $fstype,
-    options => "size=${size},mode=${mode},uid=${owner},gid=${group}",
+    options => $options_real,
     atboot  => $atboot,
   }
 }
